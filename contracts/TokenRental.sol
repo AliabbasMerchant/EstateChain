@@ -10,7 +10,7 @@ contract TokenRental is TokenHelper {
 
     function calcRentPerSqFtPerDay(uint _propId) public view returns(uint) {
         uint amount = 0;
-        for (uint i = 0; i < tokens.length; i++)
+        for (uint i = 0; i < noOfTokens; i++)
         {
             if (tokens[i].propId == _propId)
             {
@@ -30,7 +30,7 @@ contract TokenRental is TokenHelper {
 //        uint uniqueOwners = 0;
 //        mapping(address=>uint) addressToSqFT;
         // TODO some more efficient distribution mechanism
-        for(uint i=0; i<tokens.length;i++) {
+        for(uint i=0; i<noOfTokens;i++) {
             if(tokens[i].propId == _propId) {
                 address owner = token2Owner[i];
                 owner.transfer(rent.div(props[_propId].sqFt));

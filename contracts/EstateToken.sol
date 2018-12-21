@@ -12,7 +12,7 @@ contract EstateToken is ERC721, TokenRental {
     function balanceOf(address _owner) external view returns (uint256) {
         // not used
         uint count = 0;
-        for (uint i = 0; i < tokens.length; i++) {
+        for (uint i = 0; i < noOfTokens; i++) {
             if (token2Owner[i] == _owner) {
                 count++;
             }

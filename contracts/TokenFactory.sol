@@ -24,6 +24,7 @@ contract TokenFactory is Ownable {
         string docsHash; // on IPFS
     }
 
+    uint public noOfTokens = 0;
     Token[] public tokens;
     Property[] public props;
     mapping(uint => address) public token2Owner;
@@ -36,6 +37,7 @@ contract TokenFactory is Ownable {
         emit NewProperty(_name, _main_owner, _sqFt, propId);
         for (uint i = 0; i < _sqFt; i++) {
             uint id = tokens.push(Token(propId, _boughtAtValuePerSqFt, _sellValPerSqFt, _rentValPerSqFtPerDay)) - 1;
+            noOfTokens++;
             token2Owner[id] = _main_owner;
         }
     }
