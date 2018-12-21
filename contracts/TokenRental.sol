@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "./Safemath.sol";
-import "./TokenFactory";
+import "./SafeMath.sol";
+import "./TokenFactory.sol";
 
-contract TokenRental{
+contract TokenRental is TokenFactory, SafeMath{
   
   using SafeMath for uint256;
 
@@ -13,9 +13,9 @@ contract TokenRental{
     tokens[tokenId].rentVal = rentVal;
   }
 
-  function getTokensByProp(uint propId) returns(uint[]){
-    Tokens[] t;
-    for (uint i=0;i<tokens.length;i++){
+  function getTokensByProp(uint propId) public returns(uint[]){
+    Tokens[] memory t = [];
+    for (uint i = 0;i<tokens.length;i++){
       if (tokens[i].propId == propId){
         t.push(i);
       }
@@ -29,8 +29,8 @@ contract TokenRental{
     var result = getTokensByProp(propId);
 
     mapping(address => uint) owner_list;
-    var owners=[];
-    var token_list=[];
+    uint owners = [];
+    Token token_list = [];
     for (uint i = 0;i < result.length;i++)
     { var owner = token2owner[result[i]];
       if (owner_list[owner]){
