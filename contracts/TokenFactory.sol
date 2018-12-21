@@ -1,13 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.23;
 
 import "./Ownable.sol";
 import "./SafeMath.sol";
 
 contract TokenFactory is Ownable {
-
     using SafeMath for uint256;
-    using SafeMath32 for uint32;
-    using SafeMath16 for uint16;
 
     event NewProperty(string name, address mainOwner, uint sqFt, uint propId);
 
@@ -17,6 +14,7 @@ contract TokenFactory is Ownable {
         uint sellValPerSqFt; // 0 implies not to sell
         uint rentValPerSqFtPerDay; // 0 implies not set
     }
+
     struct Property {
         string name;
         uint sqFt;
@@ -31,7 +29,8 @@ contract TokenFactory is Ownable {
     mapping(uint => address) public token2Owner;
     mapping(uint => address) public property2MainOwner;
 
-    function newProperty(string _name, address _main_owner, uint _sqFt, uint _boughtAtValuePerSqFt, uint _sellValPerSqFt, uint _rentValPerSqFtPerDay) onlyOwner {
+    function newProperty(string _name, address _main_owner, uint _sqFt, uint _boughtAtValuePerSqFt, uint _sellValPerSqFt, uint _rentValPerSqFtPerDay) onlyOwner
+    {
         uint propId = props.push(Property(_name, _sqFt, 0, address(0), 0, "")) - 1;
         property2MainOwner[propId] = _main_owner;
         emit NewProperty(_name, _main_owner, _sqFt, propId);

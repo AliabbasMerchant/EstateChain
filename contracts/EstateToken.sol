@@ -1,13 +1,11 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.23;
 
 import "./ERC721.sol";
 import "./SafeMath.sol";
-import "./TokenHelper.sol";
+import "./TokenRental.sol";
 
-contract EstateToken is ERC721, TokenHelper {
+contract EstateToken is ERC721, TokenRental {
     using SafeMath for uint256;
-    using SafeMath32 for uint32;
-    using SafeMath16 for uint16;
 
     mapping (uint => address) tokenApprovals;
 
