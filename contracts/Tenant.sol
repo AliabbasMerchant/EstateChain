@@ -9,8 +9,14 @@ contract Tenant is TokenFactory, SafeMath, TokenHelper{
     using SafeMath for uint256;
     uint rentalVal=0;
 
-    function getRental(uint propId) public 
-    {    
+    function getRental(uint propId, uint rentedUntil) public 
+    {   
+        if (now > props[propId].rentedUntil)
+        {
+            props[propId].rentedAddress = msg.sender;
+            props[propId].rentedUntil = rentedUntil;
+        }
+
         rentalVal = props[propId].rented;
         uint ownerShare = mainOwnerSharePercentage(rentalVal,propId);
         rentalVal = rentalVal-ownerShare;
@@ -42,7 +48,7 @@ contract Tenant is TokenFactory, SafeMath, TokenHelper{
             transferRent(owner[i],share);
         }
     }
-    function transferRent(address to, uint value) public{
+    function transferRent(address to, uint value) payable public{
         balances[msg.sender] -= value;
         to.transfer(value);
     }
