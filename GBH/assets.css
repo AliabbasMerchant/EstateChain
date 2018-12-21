@@ -1,0 +1,81 @@
+body{
+	background-color:#6e23a8;
+}
+#space{
+	margin-top:70px;
+}
+#owner{
+	width:100px;
+	margin:0px;
+	margin-left:125px;
+}
+#tenant{
+	width:100px;
+	margin:0px;
+	margin-left:150px;
+}
+#main-owner{
+	width:135px;
+	margin:0px;
+	margin-left:125px;
+}
+#entity-owner, #entity-main-owner{
+	width:1250px;
+	height:350px;
+	margin-left:125px;
+	margin-right:150px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+}
+#entity-tenant{
+	width:1200px;
+	height:250px;
+	margin-left:150px;
+	margin-right:150px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+}
+#entity-tenant #info{
+	display:inline-block;
+	margin:15px;
+	background-color:white;
+	width:840px;
+	height:220px;
+	border-radius:10px;
+	text-align:center;
+}
+#save{
+	background-color:#6e23a8;
+}
+#entity-icon{
+	border-radius:5px;
+	margin:15px;
+	float:left
+}
+#info{
+	display:inline-block;
+	margin:15px;
+	background-color:white;
+	width:840px;
+	height:320px;
+	border-radius:10px;
+	text-align:center;
+}
+#name{
+	font-size:40px;
+}
+#type,#link,#rate,#rentto,#rentupto,#rentprice{
+	font-size:25px;
+}
+#entity-main-owner #content{
+	margin-top:20px;
+	height:280px;
+}
+#btn{
+	width:400px;
+	margin-left:230px;
+	background-color:yellow;
+}
+#footer{
+	text-align:center;
+}
