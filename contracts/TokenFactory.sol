@@ -29,7 +29,7 @@ contract TokenFactory is Ownable {
     mapping(uint => address) public token2Owner;
     mapping(uint => address) public property2MainOwner;
 
-    function newProperty(string _name, address _main_owner, uint _sqFt, uint _boughtAtValuePerSqFt, uint _sellValPerSqFt, uint _rentValPerSqFtPerDay) onlyOwner
+    function newProperty(string _name, address _main_owner, uint _sqFt, uint _boughtAtValuePerSqFt, uint _sellValPerSqFt, uint _rentValPerSqFtPerDay) public onlyOwner
     {
         uint propId = props.push(Property(_name, _sqFt, 0, address(0), 0, "")) - 1;
         property2MainOwner[propId] = _main_owner;

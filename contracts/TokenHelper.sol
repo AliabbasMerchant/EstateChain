@@ -5,10 +5,15 @@ import "./SafeMath.sol";
 
 contract TokenHelper is TokenFactory {
     using SafeMath for uint256;
-    uint mainOwnerSharePercentage = 10;
+    uint public mainOwnerSharePercentage = 10;
+    uint public propertyTaxPercentage = 5;
 
     function setMainOwnerSharePercentage(uint _percentage) external onlyOwner {
         mainOwnerSharePercentage = _percentage;
+    }
+
+    function setPropertyTaxPercentage(uint _percentage) external onlyOwner {
+        propertyTaxPercentage = _percentage;
     }
 
     function increaseArea(uint _propId, uint _newSqFt) external onlyOwner {
@@ -25,9 +30,9 @@ contract TokenHelper is TokenFactory {
         require(msg.sender == property2MainOwner[_propertyId]);
         _;
     }
-//    function changeName(uint _propId, string _newName) external onlyMainOwnerOf(_propId) {
-//        props[_propId].name = _newName;
-//    }
+    //    function changeName(uint _propId, string _newName) external onlyMainOwnerOf(_propId) {
+    //        props[_propId].name = _newName;
+    //    }
     function changeDocsHash(uint _propId, string _newDocsHash) external onlyMainOwnerOf(_propId) {
         props[_propId].docsHash = _newDocsHash;
     }

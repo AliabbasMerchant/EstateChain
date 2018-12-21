@@ -3,7 +3,6 @@ App = {
   contracts: {},
   account: '0x0',
   // todo more state variables
-
   init: function() {
     return App.initWeb3();
   },
@@ -26,8 +25,6 @@ App = {
       return App.render();
     });
   },
-
-  // Listen for events emitted from the contract
   listenForEvents: function() {
 //    App.contracts.EstateToken.deployed().then(function(instance) {
 //      // Restart Chrome if you are unable to receive this event
