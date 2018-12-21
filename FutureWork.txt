@@ -1,0 +1,7 @@
+Change Main Owner from GUI
+People Info
+People KYC
+Property Info
+Notifications for selling, renting
+UI Group tokens by property
+Extend Rent

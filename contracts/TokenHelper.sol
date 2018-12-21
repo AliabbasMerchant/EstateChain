@@ -1,22 +1,41 @@
 pragma solidity ^0.5.0;
 
+import "./TokenFactory.sol";
+
 contract TokenHelper is TokenFactory {
-    function getTokensByOwner(address _owner) view returns(uint[]) {
-        // Returns indices
-        uint counter = 0;
-        for (uint i = 0; i < tokens.length; i++) {
-            if (token2Owner[i] == _owner) {
-                counter++;
-            }
+    uint mainOwnerSharePercentage = 10;
+    function setMainOwnerSharePercentage(uint _percentage) external onlyOwner {
+        mainOwnerSharePercentage = _percentage;
+    }
+    function increaseArea(uint _propId, uint _newSqFt) external onlyOwner {
+        uint memory oldSqFt = props[_propId].sqFt;
+        require(_newSqFt > oldSqFt);
+        props[_propId].sqFt = _newSqFt;
+        uint memory extra = _newSqFt.sub(oldSqFt);
+        for(uint i=0;i<extra; i++) {
+            // todo distribute
         }
-        uint[] memory result = new uint[](counter);
-        counter = 0;
-        for (uint i = 0; i < tokens.length; i++) {
-            if (token2Owner[i] == _owner) {
-                result[counter] = i;
-                counter++;
-            }
-        }
-        return result;
+    }
+
+    modifier onlyMainOwnerOf(uint _propertyId) {
+        require(msg.sender == property2MainOwner[_propertyId]);
+        _;
+    }
+    function changeName(uint _propId, string _newName) external onlyMainOwnerOf(_propId) {
+        props[_propId].name = _newName;
+    }
+    function changeDocsHash(uint _propId, string _newDocsHash) external onlyMainOwnerOf(_propId) {
+        props[_propId].docsHash = _newDocsHash;
+    }
+
+    modifier onlyOwnerOf(uint _tokenId) {
+        require(msg.sender == token2Owner[_tokenId]);
+        _;
+    }
+    function setSellValPerSqFt(uint _tokenId, uint _newSellValPerSqFt) external onlyOwnerOf(_tokenId) {
+        tokens[_tokenId].sellValPerSqFt = _newSellValPerSqFt;
+    }
+    function setRentValPerSqFtPerDay(uint _tokenId, uint _newRentValPerSqFtPerDay) external onlyOwnerOf(_tokenId) {
+        tokens[_tokenId].rentValPerSqFtPerDay = _newRentValPerSqFtPerDay;
     }
 }

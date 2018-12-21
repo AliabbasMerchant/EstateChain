@@ -1,44 +1,43 @@
 pragma solidity ^0.5.0;
 
 import "./Ownable.sol";
-import "./Safemath.sol";
+import "./SafeMath.sol";
 
 contract TokenFactory is Ownable {
 
-  uint tokenId=0;
-  uint propId=0;
+    using SafeMath for uint256;
+    using SafeMath32 for uint32;
+    using SafeMath16 for uint16;
 
-  struct Token {
-    address owner;
-    uint tokenId;
-    uint rentVal;
-    uint sellVal;
-    uint propId;
-  }
+    event NewProperty(string name, address mainOwner, uint sqFt, uint propId);
 
-  struct Property{
-    address mainOwner;
-    uint sq_ft;
-    bool rented;
-    uint propId; 
-  }
-  event newProp(Property p,uint token_no);
-
-  Token[] tokens=[];
-  Property[] props=[];
-  
-  mapping(uint => address) token2Owner;
-
-  function _newProperty(address MainOwner, uint _sq_ft,uint sellVal, bool rented) public {
-    uint i = 0;
-    for (i = 0; i < _sq_ft; i++) {
-      tokens.push(Token(mainowner,tokenId,0,sellVal,propId));
-      tokenId = tokenId+1;
-      
+    struct Token {
+        uint propId;
+        uint boughtAtValuePerSqFt;
+        uint sellValPerSqFt; // 0 implies not to sell
+        uint rentValPerSqFtPerDay; // 0 implies not set
     }
-    var p = Property(mainowner,_sq_ft,propId,rented);
-    props.push(p);
-    propId = propId+1;
-    newProp(p, _sq_ft);
-  }
+    struct Property {
+        string name;
+        uint sqFt;
+        uint rentedAtValue; // 0 implies not rented
+        address rentedBy;
+        uint rentedUntil;
+        string docsHash; // on IPFS
+    }
+
+    Token[] public tokens;
+    Property[] public props;
+    mapping(uint => address) public token2Owner;
+    mapping(uint => address) public property2MainOwner;
+
+    function newProperty(string _name, address _main_owner, uint _sqFt, uint _boughtAtValuePerSqFt, uint _sellValPerSqFt, uint _rentValPerSqFtPerDay) onlyOwner {
+        uint propId = props.push(Property(_name, _sqFt, 0, address(0), 0, "")) - 1;
+        property2MainOwner[propId] = _main_owner;
+        emit NewProperty(_name, _main_owner, _sqFt, propId);
+        for (uint i = 0; i < _sqFt; i++) {
+            uint id = tokens.push(Token(propId, _boughtAtValuePerSqFt, _sellValPerSqFt, _rentValPerSqFtPerDay)) - 1;
+            token2Owner[id] = _main_owner;
+        }
+    }
 }
