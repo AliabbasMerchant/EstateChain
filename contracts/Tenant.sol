@@ -40,12 +40,12 @@ contract Tenant is TokenFactory, SafeMath, TokenHelper{
                 owner_list[owner] = owner_list[owner]+1;
             }
         }
-
+        rentalVal=rentalVal.mul(share);
         //Rental Calc
         for (uint i = 0;i<owners.length;i++)
         {    
             uint share = owners_list[owners[i]];
-            transferRent(owner[i],share);
+            transferRent(owner[i],rentalVal*share);
         }
     }
     function transferRent(address to, uint value) payable public{
