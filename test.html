@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+	<head>
+		<meta charset='en-US'>
+		<title>Test</title>
+		
+	</head>
+	<body>
+		<script type='text/javascript'>
+			var buffer=null;
+			function captureFile(event) {
+				event.preventDefault()
+				console.log("in capture"+event.target.files[0]);
+				const file = event.target.files[0]
+				console.log(file);
+				const reader = new FileReader()
+				reader.readAsArrayBuffer(file)
+				reader.onloadend = async () => {
+				  
+				  var Buffer = require('buffer').Buffer;
+
+				  buffer= new Buffer(reader.result);
+				  console.log('buffer', buffer)
+				  await ipfs.files.add(buffer, (err, result) => {
+					if(err)
+					{
+					console.log('yolo'+err);}
+					temp:result[0].hash;
+					console.log(temp);
+					
+				  });
+				}
+			}
+		</script>
+		<div id='outer'>
+			<div id='inner'>
+				<input type="file" onChange=captureFile(event) id="ctrl" webkitdirectory directory multiple/>
+			</div>
+		</div>
+		
+	</body>
+</html>
