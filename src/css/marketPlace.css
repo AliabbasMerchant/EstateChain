@@ -6,7 +6,7 @@ body{
 }
 #entity{
 	width:1200px;
-	height:250px;
+	height:285px;
 	margin-left:90px;
 	margin-right:150px;
 	background-color:#e0d7e0;
@@ -15,19 +15,21 @@ body{
 #entity-icon{
 	border-radius:5px;
 	margin:15px;
-	float:left
+	float:left;
+	height:255px;
+	width:300px;
 }
 #info{
 	display:inline-block;
 	margin:15px;
 	background-color:white;
 	width:840px;
-	height:220px;
+	height:255px;
 	border-radius:10px;
 	text-align:center;
 }
 #content{
-	height:180px;
+	height:215px;
 }
 #btn{
 	width:400px;
@@ -40,7 +42,7 @@ body{
 #name{
 	font-size:40px;
 }
-#type,#link,#rate{
+#type,#link,#rate,#area{
 	font-size:25px;
 }
 #footer{

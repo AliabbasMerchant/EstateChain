@@ -31,9 +31,9 @@ App = {
     var instance = await App.contracts.EstateToken.deployed();
     var noOfTokens = await instance.noOfTokens();
     noOfTokens = noOfTokens.toNumber();
-    var ListDiv = $("#container1");
+    var ListDiv = $("#container2");
     ListDiv.empty();
-    console.log(noOfTokens);
+//    console.log(noOfTokens);
     for (var i = 0; i < noOfTokens; i++) {
       var token = await instance.tokens(i);
       var propId = token[0];
@@ -45,83 +45,110 @@ App = {
       var rentedAt = property[2];
       var rentedTo = property[3];
       var rentedUpto = property[4];
+      var img = property[5];
       var owner = await instance.token2Owner(i);
-      console.log("owner "+owner.toString());
-      if(owner.toString() == App.account.toString()) {
+//      console.log("owner "+owner.toString());
+      console.log(owner, App.account);
+      if(owner.toUpperCase() === App.account.toUpperCase()) {
         // todo
-        var entity = App.assetsOwner("img.jpg", name, "-", boughtAtValuePerSqFt, rentedTo, rentedAt, rentedUpto, sellValPerSqFt, rentValPerSqFtPerDay, i)
+        var entity = await App.assetsOwner(img, name, "Image", boughtAtValuePerSqFt, rentedTo, rentedAt, new Date(rentedUpto), sellValPerSqFt, rentValPerSqFtPerDay, i);
         ListDiv.append(entity);
       }
     }
     var noOfProperties = await instance.noOfProperties();
     noOfProperties = noOfProperties.toNumber();
-    console.log(noOfProperties);
+//    console.log(noOfProperties);
     for (var i = 0; i < noOfProperties; i++) {
-      console.log(i);
+//      console.log(i);
       var prop = await instance.props(i);
       var name = prop[0];
       var sqft = prop[1];
       var rentedAtValue = prop[2];
       var rentedBy = prop[3];
       var rentedUntil = prop[4];
-      var docsHash = prop[5];
+      var img = prop[5];
       var rent = await instance.calcRentPerSqFtPerDay(i);
-      console.log("rented by " + rentedBy.toString());
-      if(rentedBy.toString() == App.account.toString()) {
-        var entity = App.assetsTenant("img.html", name, "-", rent, new Date(rentedUntil))
+//      console.log("rented by " + rentedBy.toString());
+      console.log(rentedBy, App.account);
+      if(rentedBy.toUpperCase() === App.account.toUpperCase()) {
+        var entity = await App.assetsTenant(img, name, "Image", rent, new Date(rentedUntil))
         ListDiv.append(entity);
       }
       var owner = await instance.property2MainOwner(i);
-      console.log("propOwner " + owner.toString());
-      if(owner == App.account) {
-        var entity = App.assetsMainOwner("img.jpg", name, "-", rentedTo, rentedAt, rentedUpto)
+      console.log(owner, App.account)
+      if(owner.toUpperCase() === App.account.toUpperCase()) {
+//      (img,name,l,rentedto,rentpri,rentup)
+        console.log("rentedby " + rentedBy);
+        var entity = await App.assetsMainOwner(img, name, "Image", rentedBy.toString(), rentedAtValue.toNumber(), new Date(rentedUntil), i);
         ListDiv.append(entity);
       }
     }
     console.log("rendered");
   },
-  assetsOwner: function(img,name,l,rate,rentedto,rentedpri,rentedup,sell,rent, id)
-  {
+  changeDetails: function(id) {
+    var sp = document.getElementById("sellPrice"+id.toString()).value;
+    var rent = document.getElementById("rent"+id.toString()).value;
+    console.log(sp, rent);
+    App.contracts.EstateToken.deployed().then(function(_instance) {
+      return _instance.setValues(id, sp, rent);
+      }).then(function(result) {
+        console.log(result);
+      }).catch(function(err) {
+        console.log(err);
+    });
+  },
+  transfer: function(id) {
+      var newOwnerAdd = document.getElementById("transfer"+id.toString()).value;
+      console.log(newOwnerAdd);
+      App.contracts.EstateToken.deployed().then(function(_instance) {
+        return _instance.changeMainOwner(id, newOwnerAdd);
+        }).then(function(result) {
+          console.log(result);
+        }).catch(function(err) {
+          console.log(err);
+      });
+    },
+  assetsOwner: function(img,name,l,rate,rentedto,rentedpri,rentedup,sell,rent, id) {
     var str="";
     str+="<div class=well id=owner >OWNER</div><div id=entity-owner><img id=entity-icon src="+img+" height=320 width=350 /><div id=info><div id=content>";
     str+="<strong id=name>"+name+"</strong><br/>";
     str+="<strong id=type>Token</strong><br/>";
-    str+="<strong id=link>"+l+"</strong><br/>";
-    str+="<strong id=rate>"+rate+"</strong><br/>";
-    str+="<strong id=rentto>"+rentedto+"</strong><br/>";
-    str+="<strong id=rentprice>"+rentedpri+"</strong><br/>";
-    str+="<strong id=rentupto>"+rentedup+"</strong><br/>";
-    str+="</div><form><span style=margin-right:40px;><label>Selling Price: </label><input type=text value="+sell+" name=sellPrice id=sellPrice/>";
-    str+="</span><span style=margin-right:40px;><label>Expected Rent Per Day Per Sq.Ft.: </label><input type=text value="+rent+" name=rent id=rent/></span><button type=button id=save class=\'btn btn-primary\'>Save</button>";
+    str+="<strong id=link><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<strong id=rate>Current Value: "+rate+"</strong><br/>";
+    str+="<strong id=rentto>Rented To: "+rentedto+"</strong><br/>";
+    str+="<strong id=rentprice>Rented At Price: "+rentedpri+"</strong><br/></div>";
+    str+="<span style=margin-right:40px;><label>Selling Price: </label><input type=text value="+sell+" id=\"sellPrice"+id.toString()+"\"/></span>";
+    str+="<span style=margin-right:40px;><label>Expected Rent Per Day Per Sq.Ft.: </label><input type=text value="+rent+" id=\"rent"+id.toString()+"\"/></span>"
+    str+="<button type=button id=save onclick=\"App.changeDetails("+id+");\" class=\'btn btn-primary\'>Save</button>";
     str+="</form></div></div><hr>";
     return str;
   },
-  assetsTenant: function(img,name,l,rentprice,rentupto)
-  {
+  assetsTenant: function(img,name,l,rentprice,rentupto) {
     var str="";
     str+="<div class=well id=tenant >TENANT</div><div id=entity-tenant><img id=entity-icon src="+img+" height=220 width=300 />";
     str+="<div id=info><strong id=name>"+name+"</strong><br/>";
     str+="<strong id=type>Property</strong><br/>";
-    str+="<strong id=link>"+l+"</strong><br/>";
-    str+="<strong id=rentprice>"+rentprice+"</strong><br/>";
-    str+="<strong id=rentupto>"+rentupto+"</strong><br/></div></div><hr>";
+    str+="<strong id=link><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<strong id=rentprice>Rented At Price: "+rentprice+"</strong><br/>";
+//    str+="<strong id=rentupto>Rented Upto: "+rentupto+"</strong><br/>"
+    str += "</div></div><hr>";
     return str;
   },
-  assetsMainOwner: function(img,name,l,rate,rentedto,rentpri,rentup)
-  {
+  assetsMainOwner: function(img,name,l,rentedto,rentpri,rentup, id) {
     var str='';
     str+="<div class=well id=main-owner >MAIN OWNER</div><div id=entity-main-owner><img id=entity-icon src="+img+" height=320 width=350 />";
     str+="<div id=info><div id=content><strong id=name>"+name+"</strong><br/>";
     str+="<strong id='type'>Property</strong><br/>";
-    str+="<strong id='link'>"+l+"</strong><br/>";
-    str+="<strong id='rentto'>"+rentto+"</stro ng><br/>";
-    str+="<strong id='rentprice'>"+rentpri+"</strong><br/>";
-    str+="<strong id='rentupto'>"+rentup+"</strong><br/>";
-    str+="</div></div></div><hr>"
+    str+="<strong id='link'><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<strong id='rentto'>Rented To:"+rentedto+"</strong><br/>";
+    str+="<strong id='rentprice'>Rented Price:"+rentpri+"</strong><br/></div>";
+    str+="<span style=margin-right:40px;><label>Transfer Main Ownership To Address: </label><input type=text id=\"transfer"+id.toString()+"\"/></span>"
+    str+="<button type=button id=saveNewOwner onclick=\"App.transfer("+id+");\" class=\'btn btn-primary\'>Save</button>";
+    str+="</form></div></div><hr>";
     return str;
   }
 
-};
+}
 async function _init() {
     await App.init();
 }

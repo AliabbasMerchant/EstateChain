@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Form</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel='stylesheet' href='css/Form.css' type='text/css' /><script
+		src="https://code.jquery.com/jquery-3.3.1.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/web3.min.js"></script>
+	<script src="js/truffle-contract.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div id='navi'>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">RealEstateChain</a>
+				</div>
+                <ul class="nav navbar-nav">
+                    <li><a href="marketPlaceProperties.html">Properties</a></li>
+                    <li><a href="marketPlaceTokens.html">Tokens</a></li>
+                </ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="#">Governing Body Only</a></li>
+					<li><a href="assets.html">Your Assets</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<div id='space'>
+	</div>
+	
+	<div id='container1'>
+		<div id='entity'>
+			<strong id='str'>THESE VALUES CAN BE MODIFIED BY THE GOVERNING BODY ONLY.</strong>
+		</div>
+		<hr>
+		<div id='entity1'>
+			<div id='form1'>
+			<form >
+				<div id='name'>
+				<label>Name of Property: </label>
+				<input type='text' id='nameTB'/>
+				</div>
+				<div id='address'>
+				<label>Main Owner Account Address: </label>
+				<input type='text' id='addressTB'/>
+				</div>
+				<div id='area'>
+				<label>Area(Sq.Ft.) : </label>
+				<input type='text' id='areaTB'/>
+				</div>
+                <div id='image'>
+                <label>Image: </label>
+                <input type='text' id='imageTB'/>
+                </div>
+				<div id="cvalue">
+				<label>Current Value : </label>
+				<input type='text' id='cvalueTB'/>
+				</div>
+				<div id='svalue'>
+				<label>Expected Selling Value : </label>
+				<input type='text' id='svalueTB'/>
+				</div>
+				<div id='rent'>
+				<label>Expected Rent per sq. ft. per day : </label>
+				<input type='text' id='rentTB'/>
+				</div>
+				<button type="button" class="btn btn-primary" id="idnewProp" onclick="newProp()">Save</button>
+			</form>
+			</div>
+		</div>
+		<hr>
+		<div id='entity2'>
+			<div id='form2'>
+			<form >
+				<div id='mosp'>
+				<label>Main Owner Share Percent : </label>
+				<input type='text' name='mosp' id="MOSPTB"/>
+				</div>
+				<button type="button" class="btn btn-primary" id="idownerShare" onclick="ownerShare()">Save</button>
+			</form>
+			</div>
+		</div>
+		<hr>
+		<div id='entity3'>
+			<div id='form3'>
+			<form >
+				<div id='psp'>
+				<label>Property Tax Percentage : </label>
+				<input type='text' id='pspTB'/>
+				</div>
+				<button type="button" class="btn btn-primary" id="idpptyTax" onclick="pptyTax()">Save</button>
+			</form>
+			</div>
+		</div>
+		<hr>
+	</div>
+    <footer>
+        <p id='footer'> All values are in Ether, Per square foot and per day</p>
+    </footer>>
+    <script src="js/Form.js" type='text/javascript'></script>
+</body>
+</html>

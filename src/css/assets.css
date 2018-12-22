@@ -44,7 +44,7 @@ body{
 	border-radius:10px;
 	text-align:center;
 }
-#save{
+#save, #saveNewOwner{
 	background-color:#6e23a8;
 }
 #entity-icon{

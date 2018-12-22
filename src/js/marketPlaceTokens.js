@@ -22,14 +22,15 @@ App = {
       return App.render();
     });
   },
-  makeEntity: function(img,name,l,rate, id) {
+  makeEntity: function(img,name,l,rate, sqft, id) {
     console.log("Button "+id);
   	var str='';
     str+="<div id=entity><img id=entity-icon src="+img+" height=220 width=300 /><div id=info><div id=content>";
     str+="<strong id=name>"+name+"</strong><br/>";
     str+="<strong id=type>"+"Token"+"</strong><br/>";
-    str+="<strong id=link>"+l+"</strong><br/>";
-    str+="<strong id=rate>"+rate+"</strong></div><div id=btn>";
+    str+="<strong id=link><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<strong id=area>Area: "+sqft+" sq. ft.</strong><br/>";
+    str+="<strong id=rate>Selling Price: "+rate+"</strong></div><div id=btn>";
     str+="<button type=button class=\'btn btn-primary btn-block\' id=more_info_btn onclick=\"App.buy("+id+");\">"+"Buy"+"</button></div></div></div><hr>";
   	return str;
   },
@@ -53,9 +54,13 @@ App = {
       var rentValPerSqFtPerDay = token[3]; // 0 implies not set
       var property = await instance.props(propId);
       var name = property[0];
-      // todo
-      var entity = App.makeEntity("img.jpg", name, "-", sellValPerSqFt, i)
-      tokenListDiv.append(entity);
+      var sqft = property[1];
+      var img = property[5];
+      var owner = await instance.token2Owner(i);
+      if(!(owner.toUpperCase() === App.account.toUpperCase())) {
+        var entity = App.makeEntity(img, name, "Image", sellValPerSqFt, sqft, i)
+        tokenListDiv.append(entity);
+      }
     }
   },
   buy: function(_tokenId) {
@@ -68,7 +73,9 @@ App = {
         var sellValPerSqFt = token[2];
         sellValPerSqFt = sellValPerSqFt.toNumber();
         console.log(sellValPerSqFt);
-        return inst.buy(_tokenId, { from: App.account, value:sellValPerSqFt });
+//        coll.buyCollectible(2,{from:web3.eth.accounts[3] ,value:web3.toWei(10,’ether’)})
+//        return inst.buy(_tokenId, { from: App.account, value:sellValPerSqFt});
+        return inst.buy(_tokenId, { from: App.account, value:web3.toWei(sellValPerSqFt, 'ether')});
     }).then(function(result) {
         console.log(result);
     }).catch(function(err) {

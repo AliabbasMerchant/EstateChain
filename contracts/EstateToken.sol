@@ -39,9 +39,10 @@ contract EstateToken is ERC721, TokenRental {
     }
 
     function buy(uint _tokenId) external payable {
-        require(msg.sender != token2Owner[_tokenId] && tokens[_tokenId].sellValPerSqFt != 0, "Not available for sale");
+//        require(msg.sender != token2Owner[_tokenId] && tokens[_tokenId].sellValPerSqFt != 0, "Not available for sale");
+        require(msg.sender != token2Owner[_tokenId], "Not available for sale");
         uint sellingPrice = tokens[_tokenId].sellValPerSqFt;
-        require(msg.value == sellingPrice, "Insufficient wei provided");
+        require(msg.value == sellingPrice, "Insufficient ether provided");
         token2Owner[_tokenId].transfer(sellingPrice);
         tokens[_tokenId].boughtAtValuePerSqFt = sellingPrice;
         _transfer(token2Owner[_tokenId], msg.sender, _tokenId);

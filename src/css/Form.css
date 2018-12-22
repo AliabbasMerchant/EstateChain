@@ -1,0 +1,73 @@
+body{
+	background-color:#6e23a8;
+}
+#space{
+	margin-top:70px;
+}
+#entity{
+	width:1200px;
+	height:35px;
+	margin-left:90px;
+	margin-right:150px;
+	margin-top:0px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+	text-align:center;
+}
+#idownerShare{
+    margin-left:330px;
+}
+#idpptyTax{
+    margin-left:344px;
+}
+#idnewProp{
+    margin-left:65px;
+}
+#str{
+	font-size:20px;
+}
+#entity1{
+	width:1200px;
+	height:100px;
+	margin-left:90px;
+	margin-right:150px;
+	margin-top:0px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+}
+#entity2{
+	width:800px;
+	height:50px;
+	margin-left:275px;
+	margin-right:150px;
+	margin-top:0px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+}
+#entity3{
+	width:800px;
+	height:50px;
+	margin-left:275px;
+	margin-right:150px;
+	margin-top:0px;
+	background-color:#e0d7e0;
+	border-radius:5px;
+}
+#psp,#mosp,#image{
+	display:inline-block;
+	margin:10px;
+}
+#form1{
+	margin:0px;
+}
+#name,#address,#area,#cvalue,#svalue,#rent{
+	display:inline-block;
+	margin:10px;
+}
+#save{
+	background-color:#6e23a8;
+	margin-left:250px;
+}
+#footer{
+	text-align:center;
+}

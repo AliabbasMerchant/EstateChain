@@ -22,14 +22,15 @@ App = {
       return App.render();
     });
   },
-  makeEntity: function(img,name,l,rate, id) {
+  makeEntity: function(img,name,l,rate, sqft, id) {
     console.log("Rent "+id);
   	var str='';
     str+="<div id=entity><img id=entity-icon src="+img+" height=220 width=300 /><div id=info><div id=content>";
     str+="<strong id=name>"+name+"</strong><br/>";
     str+="<strong id=type>Property</strong><br/>";
-    str+="<strong id=link>"+l+"</strong><br/>";
-    str+="<strong id=rate>Rent Rate:"+rate+"</strong></div><div id=btn>";
+    str+="<strong id=link><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<strong id=area>Area: "+sqft+" sq. ft.</strong><br/>";
+    str+="<strong id=rate>Rent Rate: "+rate+"</strong></div><div id=btn>";
     str+="<button type=button class=\'btn btn-primary btn-block\' id=more_info_btn onclick=\"App.rent("+id+");\">Rent</button></div></div></div><hr>";
   	return str;
   },
@@ -52,11 +53,15 @@ App = {
       var rentedAtValue = prop[2];
       var rentedBy = prop[3];
       var rentedUntil = prop[4];
-      var docsHash = prop[5];
+      var image = prop[5];
       var rent = await inst.calcRentPerSqFtPerDay(i);
-      // todo
-      var entity = App.makeEntity("img.jpg", name, "-", rent, i)
-      ListDiv.append(entity);
+      var mainOwner = await inst.property2MainOwner(i);
+      if(!(rentedBy.toUpperCase() === App.account.toUpperCase())) {
+        if(!(mainOwner.toUpperCase() === App.account.toUpperCase())) {
+          var entity = App.makeEntity(image, name, "Image", rent, sqft, i)
+          ListDiv.append(entity);
+        }
+      }
     }
   },
   rent: function(_propId, days) {
@@ -72,7 +77,7 @@ App = {
             var sqft = prop[1];
             var _value = rent*days*sqft;
             console.log(_value);
-            inst.Rent(_propId, days, {from:App.account, value:_value}).then(function(res) {
+            inst.Rent(_propId, days, {from:App.account, value:web3.toWei(_value, 'ether')}).then(function(res) {
                 console.log(res);
             });
         });

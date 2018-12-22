@@ -20,12 +20,12 @@ contract TokenHelper is TokenFactory {
         uint oldSqFt = props[_propId].sqFt;
         require(_newSqFt > oldSqFt);
         props[_propId].sqFt = _newSqFt;
-        uint extra = _newSqFt.sub(oldSqFt);
+//        uint extra = _newSqFt.sub(oldSqFt);
         // todo distribute
     }
 
     modifier onlyMainOwnerOf(uint _propertyId) {
-        require(msg.sender == property2MainOwner[_propertyId]);
+        require(msg.sender == property2MainOwner[_propertyId], "Can only be executed by the main owner");
         _;
     }
     //    function changeName(uint _propId, string _newName) external onlyMainOwnerOf(_propId) {
@@ -34,16 +34,16 @@ contract TokenHelper is TokenFactory {
     function changeDocsHash(uint _propId, string _newDocsHash) external onlyMainOwnerOf(_propId) {
         props[_propId].docsHash = _newDocsHash;
     }
+    function changeMainOwner(uint _propId, address _newOwner) external onlyMainOwnerOf(_propId) {
+        property2MainOwner[_propId] = _newOwner;
+    }
 
     modifier onlyOwnerOf(uint _tokenId) {
-        require(msg.sender == token2Owner[_tokenId]);
+        require(msg.sender == token2Owner[_tokenId], "Can only be executed by the owner");
         _;
     }
-    function setSellValPerSqFt(uint _tokenId, uint _newSellValPerSqFt) external onlyOwnerOf(_tokenId) {
+    function setValues(uint _tokenId, uint _newSellValPerSqFt, uint _newRentValPerSqFtPerDay) external onlyOwnerOf(_tokenId) {
         tokens[_tokenId].sellValPerSqFt = _newSellValPerSqFt;
-    }
-
-    function setRentValPerSqFtPerDay(uint _tokenId, uint _newRentValPerSqFtPerDay) external onlyOwnerOf(_tokenId) {
         tokens[_tokenId].rentValPerSqFtPerDay = _newRentValPerSqFtPerDay;
     }
 }
