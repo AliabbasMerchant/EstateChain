@@ -23,7 +23,7 @@ contract TokenRental is TokenHelper {
     function Rent(uint _propId, uint _days) external payable {
         uint rentPerSqFtPerDay = calcRentPerSqFtPerDay(_propId);
         uint rent = rentPerSqFtPerDay.mul(_days).mul(props[_propId].sqFt);
-        require(msg.value == rent);
+        require(msg.value == rent*(10**18), "Incorrect ether provided");
         uint mainOwnerShare = rent.mul(mainOwnerSharePercentage).div(100);
         property2MainOwner[_propId].transfer(mainOwnerShare);
         rent = rent - mainOwnerShare;
