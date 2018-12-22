@@ -110,8 +110,8 @@ App = {
     },
   assetsOwner: function(img,name,l,rate,rentedto,rentedpri,rentedup,sell,rent, id) {
     var str="";
-    str+="<div class=well id=owner >OWNER</div><div id=entity-owner><img id=entity-icon src="+img+" height=320 width=350 /><div id=info><div id=content>";
-    str+="<strong id=name>"+name+"</strong><br/>";
+    str+="<div class=well id=owner >OWNER</div><div id=entity-owner><img id=entity-icon src="+img+" height=320 width=350 />";
+    str+="<div id=info><div id=content><strong id=name>"+name+"</strong><br/>";
     str+="<strong id=type>Token</strong><br/>";
     str+="<strong id=link><a href=\""+img+"\">"+l+"</a></strong><br/>";
     str+="<strong id=rate>Current Value: "+rate+"</strong><br/>";
@@ -120,7 +120,7 @@ App = {
     str+="<span style=margin-right:40px;><label>Selling Price: </label><input type=text value="+sell+" id=\"sellPrice"+id.toString()+"\"/></span>";
     str+="<span style=margin-right:40px;><label>Expected Rent Per Day Per Sq.Ft.: </label><input type=text value="+rent+" id=\"rent"+id.toString()+"\"/></span>"
     str+="<button type=button id=save onclick=\"App.changeDetails("+id+");\" class=\'btn btn-primary\'>Save</button>";
-    str+="</form></div></div><hr>";
+    str+="</div></div><hr>";
     return str;
   },
   assetsTenant: function(img,name,l,rentprice,rentupto) {
@@ -140,11 +140,11 @@ App = {
     str+="<div id=info><div id=content><strong id=name>"+name+"</strong><br/>";
     str+="<strong id='type'>Property</strong><br/>";
     str+="<strong id='link'><a href=\""+img+"\">"+l+"</a></strong><br/>";
+    str+="<span style=margin-right:40px;><label>Transfer Main Ownership To Address: </label><input type=text id=\"transfer"+id.toString()+"\"/></span>"
+    str+="<button type=button id=saveNewOwner onclick=\"App.transfer("+id+");\" class=\'btn btn-primary\'>Save</button><br/>";
     str+="<strong id='rentto'>Rented To:"+rentedto+"</strong><br/>";
     str+="<strong id='rentprice'>Rented Price:"+rentpri+"</strong><br/></div>";
-    str+="<span style=margin-right:40px;><label>Transfer Main Ownership To Address: </label><input type=text id=\"transfer"+id.toString()+"\"/></span>"
-    str+="<button type=button id=saveNewOwner onclick=\"App.transfer("+id+");\" class=\'btn btn-primary\'>Save</button>";
-    str+="</form></div></div><hr>";
+    str+="</div></div><hr>";
     return str;
   }
 
