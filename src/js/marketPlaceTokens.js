@@ -1,27 +1,85 @@
-function marketPlace(img,name,type,l,rate,btn) {
-	var str='';
-	for(var i=0;i<img.length;i++)	
-	{
-		str+="<div id=entity><img id=entity-icon src="+img[i]+" height=220 width=300 /><div id=info><div id=content>";
-		str+="<strong id=name>"+name[i]+"</strong><br/>";
-		str+="<strong id=type>"+type[i]+"</strong><br/>";
-		str+="<strong id=link>"+l[i]+"</strong><br/>";
-		str+="<strong id=rate>"+rate[i]+"</strong></div><div id=btn>";
-		str+="<button type=button class=\'btn btn-primary btn-block\' id=more_info_btn>"+btn[i]+"</button></div></div></div><hr>";
-	}
-	return str;
+App = {
+  web3Provider: null,
+  contracts: {},
+  account: '0x0',
+  init: async function() {
+    return await App.initWeb3();
+  },
+  initWeb3: async function() {
+    if (typeof web3 !== 'undefined') {
+      App.web3Provider = web3.currentProvider;
+    } else {
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    }
+    web3 = new Web3(App.web3Provider);
+    return await App.initContract();
+  },
+  initContract: async function() {
+    var a = false;
+    $.getJSON("EstateToken.json", function(estateToken) {
+      App.contracts.EstateToken = TruffleContract(estateToken);
+      App.contracts.EstateToken.setProvider(App.web3Provider);
+      return App.render();
+    });
+  },
+  makeEntity: function(img,name,l,rate, id) {
+    console.log("Button "+id);
+  	var str='';
+    str+="<div id=entity><img id=entity-icon src="+img+" height=220 width=300 /><div id=info><div id=content>";
+    str+="<strong id=name>"+name+"</strong><br/>";
+    str+="<strong id=type>"+"Token"+"</strong><br/>";
+    str+="<strong id=link>"+l+"</strong><br/>";
+    str+="<strong id=rate>"+rate+"</strong></div><div id=btn>";
+    str+="<button type=button class=\'btn btn-primary btn-block\' id=more_info_btn onclick=\"App.buy("+id+");\">"+"Buy"+"</button></div></div></div><hr>";
+  	return str;
+  },
+  render: async function() {
+    web3.eth.getCoinbase(function(err, account) {
+      if (err === null) {
+        App.account = account;
+      }
+    });
+    var instance = await App.contracts.EstateToken.deployed();
+    var noOfTokens = await instance.noOfTokens();
+    noOfTokens = noOfTokens.toNumber();
+    var tokenListDiv = $("#container1");
+    tokenListDiv.empty();
+    console.log(noOfTokens);
+    for (var i = 0; i < noOfTokens; i++) {
+      var token = await instance.tokens(i);
+      var propId = token[0];
+      var boughtAtValuePerSqFt = token[1];
+      var sellValPerSqFt = token[2]; // 0 implies not to sell
+      var rentValPerSqFtPerDay = token[3]; // 0 implies not set
+      var property = await instance.props(propId);
+      var name = property[0];
+      // todo
+      var entity = App.makeEntity("img.jpg", name, "-", sellValPerSqFt, i)
+      tokenListDiv.append(entity);
+    }
+  },
+  buy: function(_tokenId) {
+    console.log("buy " + _tokenId);
+    var inst;
+    App.contracts.EstateToken.deployed().then(function(_instance) {
+        inst = _instance;
+        return _instance.tokens(_tokenId);
+    }).then(function(token) {
+        var sellValPerSqFt = token[2];
+        sellValPerSqFt = sellValPerSqFt.toNumber();
+        console.log(sellValPerSqFt);
+        return inst.buy(_tokenId, { from: App.account, value:sellValPerSqFt });
+    }).then(function(result) {
+        console.log(result);
+    }).catch(function(err) {
+        console.log(err);
+    });
+  }
+};
+async function _init() {
+    await App.init();
 }
-
-var img = new Array("img.jpg");
-var le=new Array("divy");
-var type=new Array('Property')
-var l =new Array('Link p');
-var rate=new Array('$899');
-var btn=new Array('Buy');
-var  rentedto=new Array('rentedto');
-var  rentedpri=new Array('rentedpri');
-var  rentedup=new Array('rentedup');
-var  sell=new Array('sell');
-var  rent=new Array('rent');
-
-document.getElementById('container1').innerHTML = marketPlace(img,le,type,l,rate,btn);
+$(window).on('load', function(){
+//  await App.init();
+    _init();
+});

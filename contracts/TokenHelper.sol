@@ -21,9 +21,7 @@ contract TokenHelper is TokenFactory {
         require(_newSqFt > oldSqFt);
         props[_propId].sqFt = _newSqFt;
         uint extra = _newSqFt.sub(oldSqFt);
-        for (uint i = 0; i < extra; i++) {
-            // todo distribute
-        }
+        // todo distribute
     }
 
     modifier onlyMainOwnerOf(uint _propertyId) {
